@@ -12,8 +12,8 @@ class TreeMaker {
             return;
         }
 
-        this.branchRand = H.makeRand(config.branch.seed);
-        this.leafRand   = H.makeRand(config.leaf.seed);
+        this.branchRand = Helper.makeRand(config.branch.seed);
+        this.leafRand   = Helper.makeRand(config.leaf.seed);
 
         // type: {"branches": [], "children": []}
         let tree = this.makeTree(config);
@@ -180,8 +180,8 @@ class TreeMaker {
     }
     getP2(point, angle, length) {
         // Returns P2 given P1, angle and length
-        let p2x = length * Math.cos(H.rad(angle)) + point.x;
-        let p2y = length * Math.sin(-1 * H.rad(angle)) + point.y;
+        let p2x = length * Math.cos(Helper.degreesToRadians(angle)) + point.x;
+        let p2y = length * Math.sin(-1 * Helper.degreesToRadians(angle)) + point.y;
         return { x: p2x, y: p2y };
     }
     buildPathFromSegment(segment) {
@@ -189,17 +189,17 @@ class TreeMaker {
         let dx = segment.p2.x - segment.p1.x;
         let dy = segment.p2.y - segment.p1.y;
         let angle = Math.atan2(dy, dx);
-        let a1 = H.deg(angle) + 90;
-        let a2 = H.deg(angle) - 90;
+        let a1 = Helper.radiansToDegrees(angle) + 90;
+        let a2 = Helper.radiansToDegrees(angle) - 90;
 
-        let x3 = segment.r1 * Math.cos(H.rad(a1));
-        let y3 = segment.r1 * Math.sin(H.rad(a1));
-        let x4 = segment.r1 * Math.cos(H.rad(a2));
-        let y4 = segment.r1 * Math.sin(H.rad(a2));
-        let x5 = segment.r2 * Math.cos(H.rad(a1));
-        let y5 = segment.r2 * Math.sin(H.rad(a1));
-        let x6 = segment.r2 * Math.cos(H.rad(a2));
-        let y6 = segment.r2 * Math.sin(H.rad(a2));
+        let x3 = segment.r1 * Math.cos(Helper.degreesToRadians(a1));
+        let y3 = segment.r1 * Math.sin(Helper.degreesToRadians(a1));
+        let x4 = segment.r1 * Math.cos(Helper.degreesToRadians(a2));
+        let y4 = segment.r1 * Math.sin(Helper.degreesToRadians(a2));
+        let x5 = segment.r2 * Math.cos(Helper.degreesToRadians(a1));
+        let y5 = segment.r2 * Math.sin(Helper.degreesToRadians(a1));
+        let x6 = segment.r2 * Math.cos(Helper.degreesToRadians(a2));
+        let y6 = segment.r2 * Math.sin(Helper.degreesToRadians(a2));
 
         let cx1 = segment.p1.x + x3;
         let cy1 = segment.p1.y + y3;
@@ -253,14 +253,14 @@ class TreeMaker {
             let adj = b.angle + 90; // Perpendicular to branch angle
             let offset = this.leafRand() * 2 * config.leaf.spread - config.leaf.spread;
 
-            let ox = offset * Math.cos(H.rad(adj));
-            let oy = offset * Math.sin(-1 * H.rad(adj));
+            let ox = offset * Math.cos(Helper.degreesToRadians(adj));
+            let oy = offset * Math.sin(-1 * Helper.degreesToRadians(adj));
 
             let base = b.p1;
             let length = b.length * this.leafRand();
             let point = {
-                x: base.x + length * Math.cos(H.rad(b.angle)) + ox,
-                y: base.y + length * Math.sin(-1 * H.rad(b.angle)) + oy
+                x: base.x + length * Math.cos(Helper.degreesToRadians(b.angle)) + ox,
+                y: base.y + length * Math.sin(-1 * Helper.degreesToRadians(b.angle)) + oy
             };
 
             let color_index = Math.floor(config.leaf.color.length * this.leafRand());
